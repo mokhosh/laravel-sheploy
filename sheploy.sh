@@ -1,5 +1,6 @@
 #!/bin/bash
 
 CLIENT_KEY=$(<~/.ssh/id_rsa.pub)
+read IP
 
-echo $CLIENT_KEY
+echo $IP
