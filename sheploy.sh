@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # get the client public key
-# ask to create key if it doesnt exist
 echo "Loading your public SSH key...\n"
 CLIENT_KEY=$(<~/.ssh/id_rsa.pub)
 
