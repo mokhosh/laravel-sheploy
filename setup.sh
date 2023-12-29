@@ -19,3 +19,5 @@ chmod 700 ~/.ssh
 echo $CLIENT_KEY >> ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 exit
+
+echo "Your public key is authorized for root and git users\n"
