@@ -35,3 +35,7 @@ echo "Installing nginx, mysql, and php\n"
 apt update
 apt install nginx -y
 apt install mysql-server -y
+
+mysql \
+  --user="root" \
+  --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PASSWORD';"
