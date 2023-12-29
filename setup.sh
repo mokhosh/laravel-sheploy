@@ -27,7 +27,7 @@ echo $CLIENT_KEY >> authorized_keys
 
 #create git user
 adduser git
-usermod -aG sudo git
+usermod -aG git
 
 # put the public key in git authorized keys
 su git
@@ -172,11 +172,11 @@ composer install --no-dev
 cp .env.example .env && nano .env
 php artisan migrate
 php artisan key:generate
-sudo chgrp -R www-data storage bootstrap/cache vendor
-sudo chmod -R ug+rwx storage bootstrap/cache vendor
+chgrp -R www-data storage bootstrap/cache vendor
+chmod -R ug+rwx storage bootstrap/cache vendor
 
 # setup queue
-sudo apt install supervisor
+apt install supervisor
 cat > /etc/supervisor/conf.d/horizon.conf << EOF
 [program:horizon]
 process_name=%(program_name)s
@@ -190,13 +190,13 @@ stopwaitsecs=3600
 
 EOF
 
-sudo supervisorctl reread
-sudo supervisorctl update
-sudo supervisorctl start horizon
+supervisorctl reread
+supervisorctl update
+supervisorctl start horizon
 
 # setup schedule
-sudo apt install cron
-sudo systemctl enable cron
+apt install cron
+systemctl enable cron
 
 crontab -l > mycron
 echo "* * * * * cd /var/www/html/$ROOT && php artisan schedule:run >> /dev/null 2>&1" >> mycron
