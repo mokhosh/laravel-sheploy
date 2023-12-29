@@ -193,3 +193,12 @@ EOF
 sudo supervisorctl reread
 sudo supervisorctl update
 sudo supervisorctl start horizon
+
+# setup schedule
+sudo apt install cron
+sudo systemctl enable cron
+
+crontab -l > mycron
+echo "* * * * * cd /var/www/html/$ROOT && php artisan schedule:run >> /dev/null 2>&1" >> mycron
+crontab mycron
+rm mycron
