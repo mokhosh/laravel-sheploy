@@ -119,7 +119,7 @@ apt install redis-server -y
 sed -i 's/.*supervised no.*/supervised systemd/' /etc/redis/redis.conf
 sed -i "s/.*requirepass foobared.*/requirepass $PASSWORD/" /etc/redis/redis.conf
 systemctl restart redis.service
-pecl install redis
+printf "\n" | pecl install redis
 apt install php-redis -y
 sed -i 's/.*extension=redis.so.*/extension=redis.so/' /etc/php/$PHP_VERSION/cli/conf.d/20-redis.ini
 service php$PHP_VERSION-fpm reload
@@ -166,7 +166,7 @@ EOFF
 read -p 'Push your laravel application to the server and press Enter to continue...' CONTINUE
 
 cd /var/www/html/$ROOT
-composer install --no-dev
+composer install --no-dev --no-interaction
 cp .env.example .env && nano .env
 php artisan migrate
 php artisan key:generate
