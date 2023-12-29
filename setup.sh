@@ -163,3 +163,14 @@ EOF
 
 # exit git user after config
 exit
+
+# install laravel application
+read -p 'Push your laravel application to the server and press Enter to continue...' CONTINUE
+
+cd /var/www/html/$ROOT
+composer install --no-dev
+cp .env.example .env && nano .env
+php artisan migrate
+php artisan key:generate
+sudo chgrp -R www-data storage bootstrap/cache vendor
+sudo chmod -R ug+rwx storage bootstrap/cache vendor
