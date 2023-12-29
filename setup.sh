@@ -8,6 +8,10 @@ read CLIENT_KEY
 echo "Enter your project's folder name key:\n"
 read ROOT
 
+# get the password from user
+echo "Enter a secure password (this will be used for mysql and other services):\n"
+read PASSWORD
+
 # put the public key in root authorized keys
 cd ~/.ssh
 echo $CLIENT_KEY >> authorized_keys
