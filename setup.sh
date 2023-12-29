@@ -202,3 +202,13 @@ crontab -l > mycron
 echo "* * * * * cd /var/www/html/$ROOT && php artisan schedule:run >> /dev/null 2>&1" >> mycron
 crontab mycron
 rm mycron
+
+# setup ssl
+apt install libsquashfuse0 squashfuse fuse snapd -y
+snap install core; snap refresh core
+apt remove certbot -y
+snap install --classic certbot
+ln -s /snap/bin/certbot /usr/bin/certbot
+certbot --nginx
+certbot renew --dry-run
+
