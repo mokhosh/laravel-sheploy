@@ -64,3 +64,5 @@ sed -i '' 's/.*memory_limit.*/memory_limit = 256M/' /etc/php/$PHP_VERSION/fpm/ph
 sed -i '' 's/.*max_execution_time.*/max_execution_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
 sed -i '' 's/.*max_input_vars.*/max_input_vars = 3000/' /etc/php/$PHP_VERSION/fpm/php.ini
 sed -i '' 's/.*max_input_time.*/max_input_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
+
+service php$PHP_VERSION-fpm restart
