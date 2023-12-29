@@ -101,3 +101,29 @@ ln -s /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
 unlink /etc/nginx/sites-enabled/default
 nginx -t
 systemctl reload nginx
+
+# set up git
+cd /var/www/html
+mkdir $ROOT
+chown git:www-data $ROOT -R
+
+apt install git
+su git
+cd ~
+git init --bare $ROOT.git
+cd ~/$ROOT.git/hooks
+touch post-receive
+chmod +x post-receive
+
+cat > /etc/nginx/sites-available/$DOMAIN << EOF
+#!/bin/sh
+
+PROD="/var/www/html/$ROOT"
+REPO="/home/git/$ROOT.git"
+
+git --work-tree=\$PROD --git-dir=\$REPO checkout -f
+
+EOF
+
+# exit git user after config
+exit
