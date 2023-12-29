@@ -66,7 +66,7 @@ mysql \
   --password="$PASSWORD" \
   --execute="FLUSH PRIVILEGES;"
 
-apt install software-properties-common
+apt install software-properties-common -y
 add-apt-repository ppa:ondrej/php
 apt update
 apt install php$PHP_VERSION-fpm php$PHP_VERSION-common php$PHP_VERSION-mysql \
@@ -115,12 +115,12 @@ unlink /etc/nginx/sites-enabled/default
 nginx -t
 systemctl reload nginx
 
-apt install redis-server
+apt install redis-server -y
 sed -i '' 's/.*supervised no.*/supervised systemd/' /etc/redis/redis.conf
 sed -i '' "s/.*requirepass foobared.*/requirepass $PASSWORD/" /etc/redis/redis.conf
 systemctl restart redis.service
 pecl install redis
-apt install php-redis
+apt install php-redis -y
 sed -i '' 's/.*extension=redis.so.*/extension=redis.so/' /etc/php/$PHP_VERSION/cli/conf.d/20-redis.ini
 service php$PHP_VERSION-fpm reload
 
@@ -143,7 +143,7 @@ cd /var/www/html
 mkdir $ROOT
 chown git:www-data $ROOT -R
 
-apt install git
+apt install git -y
 su git
 cd ~
 git init --bare $ROOT.git
@@ -176,7 +176,7 @@ chgrp -R www-data storage bootstrap/cache vendor
 chmod -R ug+rwx storage bootstrap/cache vendor
 
 # setup queue
-apt install supervisor
+apt install supervisor -y
 cat > /etc/supervisor/conf.d/horizon.conf << EOF
 [program:horizon]
 process_name=%(program_name)s
@@ -195,7 +195,7 @@ supervisorctl update
 supervisorctl start horizon
 
 # setup schedule
-apt install cron
+apt install cron -y
 systemctl enable cron
 
 crontab -l > mycron
