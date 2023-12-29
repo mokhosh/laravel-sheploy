@@ -174,3 +174,22 @@ php artisan migrate
 php artisan key:generate
 sudo chgrp -R www-data storage bootstrap/cache vendor
 sudo chmod -R ug+rwx storage bootstrap/cache vendor
+
+# setup queue
+sudo apt install supervisor
+cat > /etc/supervisor/conf.d/horizon.conf << EOF
+[program:horizon]
+process_name=%(program_name)s
+command=php /var/www/html/$ROOT/artisan horizon
+autostart=true
+autorestart=true
+user=www-data
+redirect_stderr=true
+stdout_logfile=/var/www/html/$ROOT/horizon.log
+stopwaitsecs=3600
+
+EOF
+
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start horizon
