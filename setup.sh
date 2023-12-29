@@ -25,3 +25,9 @@ chmod 600 ~/.ssh/authorized_keys
 exit
 
 echo "Your public key is authorized for root and git users\n"
+
+echo "Installing nginx, mysql, and php\n"
+
+apt update
+apt install nginx -y
+apt install mysql-server -y
