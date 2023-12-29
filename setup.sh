@@ -70,3 +70,34 @@ sed -i '' 's/.*max_input_vars.*/max_input_vars = 3000/' /etc/php/$PHP_VERSION/fp
 sed -i '' 's/.*max_input_time.*/max_input_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
 
 service php$PHP_VERSION-fpm restart
+
+cat > /etc/nginx/sites-available/$DOMAIN << EOF
+server {
+    listen 80;
+    listen [::]:80;
+    
+    root /var/www/html/$ROOT/public;
+    index index.php index.html index.htm index.nginx-debian.html;
+    
+    server_name $DOMAIN www.$DOMAIN;
+
+    location / {
+        try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php$PHP_VERSION-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+
+EOF
+
+ln -s /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
+unlink /etc/nginx/sites-enabled/default
+nginx -t
+systemctl reload nginx
