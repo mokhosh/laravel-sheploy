@@ -15,7 +15,7 @@ echo "Downloading the scripts on your server ~/laravel-sheploy...\n"
 ssh root@$IP << EOF
 apt install git -y
 cd ~
-git clone git@github.com:mokhosh/laravel-sheploy
+git clone https://github.com/mokhosh/laravel-sheploy.git
 EOF
 
 # run the server and give interactive control to the user
