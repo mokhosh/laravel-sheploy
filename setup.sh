@@ -1,24 +1,24 @@
 #!/bin/bash
 
 # get the public ssh key from user
-echo "Enter your public ssh key:\n"
+echo "Enter your public ssh key:"
 read CLIENT_KEY
 
 # get the public ssh key from user
-echo "Enter your project's folder name:\n"
+echo "Enter your project's folder name:"
 read ROOT
 
 # get the password from user
-echo "Enter a secure password (this will be used for mysql and other services):\n"
+echo "Enter a secure password (this will be used for mysql and other services):"
 read PASSWORD
 
 # get the php version from user
-echo "Enter your desired php version (default 8.3):\n"
+echo "Enter your desired php version (default 8.3):"
 read PHP_VERSION
 PHP_VERSION=${PHP_VERSION:-8.3}
 
 # get the domain name from user
-echo "Enter your domain name:\n"
+echo "Enter your domain name:"
 read DOMAIN
 
 # put the public key in root authorized keys
@@ -37,9 +37,9 @@ echo $CLIENT_KEY >> ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 exit
 
-echo "Your public key is authorized for root and git users\n"
+echo "Your public key is authorized for root and git users"
 
-echo "Installing nginx, mysql, and php\n"
+echo "Installing nginx, mysql, and php"
 
 apt update
 apt install nginx -y
