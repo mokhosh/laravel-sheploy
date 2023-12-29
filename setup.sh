@@ -4,6 +4,10 @@
 echo "Enter your public ssh key:\n"
 read CLIENT_KEY
 
+# get the public ssh key from user
+echo "Enter your project's folder name key:\n"
+read ROOT
+
 # put the public key in root authorized keys
 cd ~/.ssh
 echo $CLIENT_KEY >> authorized_keys
