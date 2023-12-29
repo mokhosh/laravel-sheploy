@@ -75,12 +75,12 @@ apt install php$PHP_VERSION-fpm php$PHP_VERSION-common php$PHP_VERSION-mysql \
     php$PHP_VERSION-dev php$PHP_VERSION-imap php$PHP_VERSION-mbstring \
     php$PHP_VERSION-opcache php$PHP_VERSION-soap php$PHP_VERSION-zip unzip -y
 
-sed -i '' 's/.*upload_max_filesize.*/upload_max_filesize = 1024M/' /etc/php/$PHP_VERSION/fpm/php.ini
-sed -i '' 's/.*post_max_size.*/post_max_size = 1024M/' /etc/php/$PHP_VERSION/fpm/php.ini
-sed -i '' 's/.*memory_limit.*/memory_limit = 256M/' /etc/php/$PHP_VERSION/fpm/php.ini
-sed -i '' 's/.*max_execution_time.*/max_execution_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
-sed -i '' 's/.*max_input_vars.*/max_input_vars = 3000/' /etc/php/$PHP_VERSION/fpm/php.ini
-sed -i '' 's/.*max_input_time.*/max_input_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i 's/.*upload_max_filesize.*/upload_max_filesize = 1024M/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i 's/.*post_max_size.*/post_max_size = 1024M/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i 's/.*memory_limit.*/memory_limit = 256M/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i 's/.*max_execution_time.*/max_execution_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i 's/.*max_input_vars.*/max_input_vars = 3000/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i 's/.*max_input_time.*/max_input_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
 
 service php$PHP_VERSION-fpm restart
 
@@ -116,12 +116,12 @@ nginx -t
 systemctl reload nginx
 
 apt install redis-server -y
-sed -i '' 's/.*supervised no.*/supervised systemd/' /etc/redis/redis.conf
-sed -i '' "s/.*requirepass foobared.*/requirepass $PASSWORD/" /etc/redis/redis.conf
+sed -i 's/.*supervised no.*/supervised systemd/' /etc/redis/redis.conf
+sed -i "s/.*requirepass foobared.*/requirepass $PASSWORD/" /etc/redis/redis.conf
 systemctl restart redis.service
 pecl install redis
 apt install php-redis -y
-sed -i '' 's/.*extension=redis.so.*/extension=redis.so/' /etc/php/$PHP_VERSION/cli/conf.d/20-redis.ini
+sed -i 's/.*extension=redis.so.*/extension=redis.so/' /etc/php/$PHP_VERSION/cli/conf.d/20-redis.ini
 service php$PHP_VERSION-fpm reload
 
 EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
