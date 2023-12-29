@@ -67,7 +67,7 @@ mysql \
   --execute="FLUSH PRIVILEGES;"
 
 apt install software-properties-common -y
-add-apt-repository ppa:ondrej/php
+add-apt-repository ppa:ondrej/php -y
 apt update
 apt install php$PHP_VERSION-fpm php$PHP_VERSION-common php$PHP_VERSION-mysql \
     php$PHP_VERSION-xml php$PHP_VERSION-xmlrpc php$PHP_VERSION-curl \
