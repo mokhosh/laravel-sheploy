@@ -1,5 +1,16 @@
 # Deploy Laravel applications using bash
 
+### usage
+
+on your local machine
+- `git clone git@github.com:mokhosh/laravel-sheploy.git`
+- `cd laravel-sheploy`
+- `./sheploy.sh`
+
+this will copy the repo on your server, and ssh into it
+- `cd ~/laravel-sheploy`
+- `./setup.sh`
+
 ### todo
 - [ ] beautify output and input
 - [ ] get the ssh port from input
