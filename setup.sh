@@ -17,6 +17,10 @@ echo "Enter your desired php version (default 8.3):\n"
 read PHP_VERSION
 PHP_VERSION=${PHP_VERSION:-8.3}
 
+# get the domain name from user
+echo "Enter your domain name:\n"
+read DOMAIN
+
 # put the public key in root authorized keys
 cd ~/.ssh
 echo $CLIENT_KEY >> authorized_keys
