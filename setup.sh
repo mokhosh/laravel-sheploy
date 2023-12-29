@@ -57,3 +57,10 @@ apt install php$PHP_VERSION-fpm php$PHP_VERSION-common php$PHP_VERSION-mysql \
     php$PHP_VERSION-gd php$PHP_VERSION-imagick php$PHP_VERSION-cli \
     php$PHP_VERSION-dev php$PHP_VERSION-imap php$PHP_VERSION-mbstring \
     php$PHP_VERSION-opcache php$PHP_VERSION-soap php$PHP_VERSION-zip unzip -y
+
+sed -i '' 's/.*upload_max_filesize.*/upload_max_filesize = 1024M/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i '' 's/.*post_max_size.*/post_max_size = 1024M/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i '' 's/.*memory_limit.*/memory_limit = 256M/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i '' 's/.*max_execution_time.*/max_execution_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i '' 's/.*max_input_vars.*/max_input_vars = 3000/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i '' 's/.*max_input_time.*/max_input_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
