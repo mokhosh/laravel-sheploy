@@ -26,7 +26,8 @@ cd ~/.ssh
 echo $CLIENT_KEY >> authorized_keys
 
 #create git user
-adduser git
+ENC_PASSWORD=$(perl -e 'print crypt($ARGV[0], "password")' $PASSWORD)
+useradd -m -p $ENC_PASSWORD git
 usermod -aG git
 
 # put the public key in git authorized keys
