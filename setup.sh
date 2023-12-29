@@ -5,7 +5,7 @@ echo "Enter your public ssh key:\n"
 read CLIENT_KEY
 
 # get the public ssh key from user
-echo "Enter your project's folder name key:\n"
+echo "Enter your project's folder name:\n"
 read ROOT
 
 # get the password from user
