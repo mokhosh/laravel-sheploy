@@ -30,12 +30,12 @@ adduser git
 usermod -aG git
 
 # put the public key in git authorized keys
-su git
+sudo -H -u git bash <<EOF
 mkdir ~/.ssh
 chmod 700 ~/.ssh
 echo $CLIENT_KEY >> ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
-exit
+EOF
 
 echo "Your public key is authorized for root and git users"
 
@@ -144,7 +144,7 @@ mkdir $ROOT
 chown git:www-data $ROOT -R
 
 apt install git -y
-su git
+sudo -H -u git bash <<EOFF
 cd ~
 git init --bare $ROOT.git
 cd ~/$ROOT.git/hooks
@@ -160,9 +160,7 @@ REPO="/home/git/$ROOT.git"
 git --work-tree=\$PROD --git-dir=\$REPO checkout -f
 
 EOF
-
-# exit git user after config
-exit
+EOFF
 
 # install laravel application
 read -p 'Push your laravel application to the server and press Enter to continue...' CONTINUE
