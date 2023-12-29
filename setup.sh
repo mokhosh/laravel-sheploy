@@ -52,6 +52,18 @@ mysql \
 mysql \
   --user="root" \
   --password="$PASSWORD" \
+  --execute="CREATE DATABASE $ROOT DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql \
+  --user="root" \
+  --password="$PASSWORD" \
+  --execute="CREATE USER '$ROOTuser'@'localhost' IDENTIFIED BY '$PASSWORD';"
+mysql \
+  --user="root" \
+  --password="$PASSWORD" \
+  --execute="GRANT ALL ON $ROOT.* TO '$ROOTuser'@'localhost';"
+mysql \
+  --user="root" \
+  --password="$PASSWORD" \
   --execute="FLUSH PRIVILEGES;"
 
 apt install software-properties-common
