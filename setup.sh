@@ -39,6 +39,7 @@ exit
 
 echo "Your public key is authorized for root and git users"
 
+#install nginx, mysql, php, and redis
 echo "Installing nginx, mysql, and php"
 
 apt update
@@ -101,6 +102,15 @@ ln -s /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
 unlink /etc/nginx/sites-enabled/default
 nginx -t
 systemctl reload nginx
+
+apt install redis-server
+sed -i '' 's/.*supervised no.*/supervised systemd/' /etc/redis/redis.conf
+sed -i '' "s/.*requirepass foobared.*/requirepass $PASSWORD/" /etc/redis/redis.conf
+systemctl restart redis.service
+pecl install redis
+apt install php-redis
+sed -i '' 's/.*extension=redis.so.*/extension=redis.so/' /etc/php/$PHP_VERSION/cli/conf.d/20-redis.ini
+service php$PHP_VERSION-fpm reload
 
 # set up git
 cd /var/www/html
