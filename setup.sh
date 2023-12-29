@@ -39,3 +39,7 @@ apt install mysql-server -y
 mysql \
   --user="root" \
   --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PASSWORD';"
+mysql \
+  --user="root" \
+  --password="$PASSWORD" \
+  --execute="FLUSH PRIVILEGES;"
