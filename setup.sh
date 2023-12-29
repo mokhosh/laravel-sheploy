@@ -151,7 +151,7 @@ cd ~/$ROOT.git/hooks
 touch post-receive
 chmod +x post-receive
 
-cat > /etc/nginx/sites-available/$DOMAIN << EOF
+cat > post-receive << EOF
 #!/bin/sh
 
 PROD="/var/www/html/$ROOT"
