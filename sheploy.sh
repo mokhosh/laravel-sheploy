@@ -3,6 +3,8 @@
 # get the client public key
 echo "Loading your public SSH key...\n"
 CLIENT_KEY=$(<~/.ssh/id_rsa.pub)
+echo "Copy this so you can use it while setting up your server\n"
+echo $CLIENT_KEY
 
 # get the server ip from user
 echo "Enter your remote server's IP adress:\n"
