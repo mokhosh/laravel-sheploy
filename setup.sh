@@ -12,6 +12,11 @@ read ROOT
 echo "Enter a secure password (this will be used for mysql and other services):\n"
 read PASSWORD
 
+# get the php version from user
+echo "Enter your desired php version (default 8.3):\n"
+read PHP_VERSION
+PHP_VERSION=${PHP_VERSION:-8.3}
+
 # put the public key in root authorized keys
 cd ~/.ssh
 echo $CLIENT_KEY >> authorized_keys
@@ -47,6 +52,8 @@ mysql \
 apt install software-properties-common
 add-apt-repository ppa:ondrej/php
 apt update
-apt install php8.3-fpm php8.3-common php8.3-mysql php8.3-xml php8.3-xmlrpc \
-    php8.3-curl php8.3-gd php8.3-imagick php8.3-cli php8.3-dev php8.3-imap \
-    php8.3-mbstring php8.3-opcache php8.3-soap php8.3-zip unzip -y
+apt install php$PHP_VERSION-fpm php$PHP_VERSION-common php$PHP_VERSION-mysql \
+    php$PHP_VERSION-xml php$PHP_VERSION-xmlrpc php$PHP_VERSION-curl \
+    php$PHP_VERSION-gd php$PHP_VERSION-imagick php$PHP_VERSION-cli \
+    php$PHP_VERSION-dev php$PHP_VERSION-imap php$PHP_VERSION-mbstring \
+    php$PHP_VERSION-opcache php$PHP_VERSION-soap php$PHP_VERSION-zip unzip -y
