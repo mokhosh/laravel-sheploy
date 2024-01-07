@@ -2,24 +2,24 @@
 
 # get the public ssh key from user
 echo "Enter your public ssh key:"
-read CLIENT_KEY
+read -r CLIENT_KEY
 
 # get the public ssh key from user
 echo "Enter your project's folder name:"
-read ROOT
+read -r ROOT
 
 # get the password from user
 echo "Enter a secure password (this will be used for mysql and other services):"
-read PASSWORD
+read -r PASSWORD
 
 # get the php version from user
 echo "Enter your desired php version (default 8.3):"
-read PHP_VERSION
+read -r PHP_VERSION
 PHP_VERSION=${PHP_VERSION:-8.3}
 
 # get the domain name from user
 echo "Enter your domain name:"
-read DOMAIN
+read -r DOMAIN
 
 # put the public key in root authorized keys
 cd ~/.ssh
@@ -179,7 +179,7 @@ EOF
 EOFF
 
 # install laravel application
-read -p 'Push your laravel application to the server and press Enter to continue...' CONTINUE
+read -r -p 'Push your laravel application to the server and press Enter to continue...' CONTINUE
 
 cd /var/www/html/$ROOT
 composer install --no-dev --no-interaction
