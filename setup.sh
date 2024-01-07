@@ -212,10 +212,10 @@ supervisorctl start horizon
 apt install cron -y
 systemctl enable cron
 
-crontab -l > mycron
-echo "* * * * * cd /var/www/html/$ROOT && php artisan schedule:run >> /dev/null 2>&1" >> mycron
-crontab mycron
-rm mycron
+crontab -l > schedule_cron
+echo "* * * * * cd /var/www/html/$ROOT && php artisan schedule:run >> /dev/null 2>&1" >> schedule_cron
+crontab schedule_cron
+rm schedule_cron
 
 # setup ssl
 apt install libsquashfuse0 squashfuse fuse snapd -y
