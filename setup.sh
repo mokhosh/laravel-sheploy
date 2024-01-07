@@ -153,7 +153,7 @@ touch post-receive
 chmod +x post-receive
 
 cat > post-receive << EOF
-#!/bin/sh
+#!/bin/bash
 
 PROD="/var/www/html/$ROOT"
 REPO="/home/git/$ROOT.git"
