@@ -23,11 +23,11 @@ read -r DOMAIN
 
 # put the public key in root authorized keys
 cd ~/.ssh || exit
-echo $CLIENT_KEY >> authorized_keys
+echo "$CLIENT_KEY" >> authorized_keys
 
 #create git user
-ENC_PASSWORD=$(perl -e 'print crypt($ARGV[0], "password")' $PASSWORD)
-useradd -m -p $ENC_PASSWORD git
+ENC_PASSWORD=$(perl -e 'print crypt($ARGV[0], "password")' "$PASSWORD")
+useradd -m -p "$ENC_PASSWORD" git
 usermod -aG git
 
 # put the public key in git authorized keys
@@ -57,11 +57,11 @@ mysql \
 mysql \
   --user="root" \
   --password="$PASSWORD" \
-  --execute="CREATE USER '$ROOTuser'@'localhost' IDENTIFIED BY '$PASSWORD';"
+  --execute="CREATE USER '${ROOT}user'@'localhost' IDENTIFIED BY '$PASSWORD';"
 mysql \
   --user="root" \
   --password="$PASSWORD" \
-  --execute="GRANT ALL ON $ROOT.* TO '$ROOTuser'@'localhost';"
+  --execute="GRANT ALL ON $ROOT.* TO '${ROOT}user'@'localhost';"
 mysql \
   --user="root" \
   --password="$PASSWORD" \
@@ -70,21 +70,21 @@ mysql \
 apt install software-properties-common -y
 add-apt-repository ppa:ondrej/php -y
 apt update
-apt install php$PHP_VERSION-\
+apt install php"$PHP_VERSION"-\
 {fpm,common,mysql,xml,xmlrpc,\
 curl,gd,imagick,cli,intl,dev,\
 imap,mbstring,opcache,soap,zip} unzip -y
 
-sed -i 's/.*upload_max_filesize.*/upload_max_filesize = 1024M/' /etc/php/$PHP_VERSION/fpm/php.ini
-sed -i 's/.*post_max_size.*/post_max_size = 1024M/' /etc/php/$PHP_VERSION/fpm/php.ini
-sed -i 's/.*memory_limit.*/memory_limit = 256M/' /etc/php/$PHP_VERSION/fpm/php.ini
-sed -i 's/.*max_execution_time.*/max_execution_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
-sed -i 's/.*max_input_vars.*/max_input_vars = 3000/' /etc/php/$PHP_VERSION/fpm/php.ini
-sed -i 's/.*max_input_time.*/max_input_time = 1000/' /etc/php/$PHP_VERSION/fpm/php.ini
+sed -i 's/.*upload_max_filesize.*/upload_max_filesize = 1024M/' /etc/php/"$PHP_VERSION"/fpm/php.ini
+sed -i 's/.*post_max_size.*/post_max_size = 1024M/' /etc/php/"$PHP_VERSION"/fpm/php.ini
+sed -i 's/.*memory_limit.*/memory_limit = 256M/' /etc/php/"$PHP_VERSION"/fpm/php.ini
+sed -i 's/.*max_execution_time.*/max_execution_time = 1000/' /etc/php/"$PHP_VERSION"/fpm/php.ini
+sed -i 's/.*max_input_vars.*/max_input_vars = 3000/' /etc/php/"$PHP_VERSION"/fpm/php.ini
+sed -i 's/.*max_input_time.*/max_input_time = 1000/' /etc/php/"$PHP_VERSION"/fpm/php.ini
 
-service php$PHP_VERSION-fpm restart
+service php"$PHP_VERSION"-fpm restart
 
-cat > /etc/nginx/sites-available/$DOMAIN << EOF
+cat > /etc/nginx/sites-available/"$DOMAIN" << EOF
 server {
     listen 80;
     listen [::]:80;
@@ -110,7 +110,7 @@ server {
 
 EOF
 
-ln -s /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/"$DOMAIN" /etc/nginx/sites-enabled/
 unlink /etc/nginx/sites-enabled/default
 nginx -t
 systemctl reload nginx
@@ -122,8 +122,8 @@ sed -i "s/.*requirepass foobared.*/requirepass $ESCAPED_PASS/" /etc/redis/redis.
 systemctl restart redis.service
 printf "\n" | pecl install redis
 apt install php-redis -y
-sed -i 's/.*extension=redis.so.*/extension=redis.so/' /etc/php/$PHP_VERSION/cli/conf.d/20-redis.ini
-service php$PHP_VERSION-fpm reload
+sed -i 's/.*extension=redis.so.*/extension=redis.so/' /etc/php/"$PHP_VERSION"/cli/conf.d/20-redis.ini
+service php"$PHP_VERSION"-fpm reload
 
 EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -141,8 +141,8 @@ rm composer-setup.php
 
 # set up git
 cd /var/www/html || exit
-mkdir $ROOT
-chown git:www-data $ROOT -R
+mkdir "$ROOT"
+chown git:www-data "$ROOT" -R
 
 apt install git -y
 sudo -H -u git bash <<EOFF
@@ -181,7 +181,7 @@ EOFF
 # install laravel application
 read -r -p 'Push your laravel application to the server and press Enter to continue...' CONTINUE
 
-cd /var/www/html/$ROOT || exit
+cd /var/www/html/"$ROOT" || exit
 composer install --no-dev --no-interaction
 cp .env.example .env && nano .env
 php artisan migrate
