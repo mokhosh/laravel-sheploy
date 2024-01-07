@@ -117,7 +117,7 @@ systemctl reload nginx
 
 apt install redis-server -y
 sed -i 's/.*supervised no.*/supervised systemd/' /etc/redis/redis.conf
-ESCAPED_PASS=$(echo "$PASSWORD" | sed 's/&/\\&/')
+ESCAPED_PASS=${PASSWORD//&/\\&}
 sed -i "s/.*requirepass foobared.*/requirepass $ESCAPED_PASS/" /etc/redis/redis.conf
 systemctl restart redis.service
 printf "\n" | pecl install redis
