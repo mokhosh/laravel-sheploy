@@ -179,7 +179,7 @@ EOF
 EOFF
 
 # install laravel application
-read -r -p 'Push your laravel application to the server and press Enter to continue...' CONTINUE
+read -r -p 'Push your laravel application to the server and press Enter to continue...' _
 
 cd /var/www/html/"$ROOT" || exit
 composer install --no-dev --no-interaction
