@@ -22,7 +22,7 @@ echo "Enter your domain name:"
 read -r DOMAIN
 
 # put the public key in root authorized keys
-cd ~/.ssh
+cd ~/.ssh || exit
 echo $CLIENT_KEY >> authorized_keys
 
 #create git user
@@ -140,15 +140,15 @@ php composer-setup.php --install-dir=/usr/local/bin --filename=composer --quiet
 rm composer-setup.php
 
 # set up git
-cd /var/www/html
+cd /var/www/html || exit
 mkdir $ROOT
 chown git:www-data $ROOT -R
 
 apt install git -y
 sudo -H -u git bash <<EOFF
-cd ~
+cd ~ || exit
 git init --bare $ROOT.git
-cd ~/$ROOT.git/hooks
+cd ~/$ROOT.git/hooks || exit
 touch post-receive
 chmod +x post-receive
 
@@ -160,7 +160,7 @@ REPO="/home/git/$ROOT.git"
 
 git --work-tree=\\\$PROD --git-dir=\\\$REPO checkout -f
 
-cd \\\$PROD
+cd \\\$PROD || exit
 php artisan down
 composer install --no-dev --no-interaction
 npm install
@@ -181,7 +181,7 @@ EOFF
 # install laravel application
 read -r -p 'Push your laravel application to the server and press Enter to continue...' CONTINUE
 
-cd /var/www/html/$ROOT
+cd /var/www/html/$ROOT || exit
 composer install --no-dev --no-interaction
 cp .env.example .env && nano .env
 php artisan migrate
