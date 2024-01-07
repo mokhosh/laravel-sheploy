@@ -161,6 +161,21 @@ REPO="/home/git/$ROOT.git"
 
 git --work-tree=\\\$PROD --git-dir=\\\$REPO checkout -f
 
+cd \\\$PROD
+php artisan down
+composer install --no-dev --no-interaction
+npm install
+npm run build
+php artisan migrate --force
+php artisan auth:clear-resets
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan view:cache
+php artisan cache:cache
+php artisan config:cache
+php artisan up
+
 EOF
 EOFF
 
