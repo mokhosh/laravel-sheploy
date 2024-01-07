@@ -208,6 +208,12 @@ supervisorctl reread
 supervisorctl update
 supervisorctl start horizon
 
+# restart horizon every hour to avoid memory leaks
+crontab -l > horizon_cron
+echo "0 * * * * cd /var/www/html/$ROOT && php artisan horizon:terminate" >> horizon_cron
+crontab horizon_cron
+rm horizon_cron
+
 # setup schedule
 apt install cron -y
 systemctl enable cron
