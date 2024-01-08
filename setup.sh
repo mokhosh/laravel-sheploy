@@ -200,7 +200,6 @@ php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
 php artisan view:cache
-php artisan cache:cache
 php artisan config:cache
 php artisan up
 
