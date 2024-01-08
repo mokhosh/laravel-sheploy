@@ -12,6 +12,8 @@ this will copy the repo on your server, and ssh into it
 - `./setup.sh`
 
 ### todo
+- [ ] modularize
+- [ ] do any step you want
 - [ ] beautify output and input
 - [ ] get the ssh port from input
 - [ ] get the ssh user from input
