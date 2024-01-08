@@ -191,8 +191,6 @@ then
     sed -i "s/.*DB_PASSWORD.*/DB_PASSWORD=\"$PASSWORD\"/" .env
     sed -i "s/.*REDIS_PASSWORD.*/REDIS_PASSWORD=\"$PASSWORD\"/" .env
     php artisan key:generate
-    chgrp -R www-data storage bootstrap/cache vendor
-    chmod -R ug+rwx storage bootstrap/cache vendor
 fi
 php artisan migrate --force
 php artisan auth:clear-resets
@@ -215,10 +213,6 @@ echo "git push production main"
 read -r -p 'Push your laravel application to the server and press Enter to continue...' _
 
 cd /var/www/html/"$ROOT" || exit
-composer install --no-dev --no-interaction
-cp .env.example .env && nano .env
-php artisan migrate
-php artisan key:generate
 chgrp -R www-data storage bootstrap/cache vendor
 chmod -R ug+rwx storage bootstrap/cache vendor
 
