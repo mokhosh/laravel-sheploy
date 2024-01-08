@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# disable interactions on ubuntu 22
+export DEBIAN_FRONTEND=noninteractive
+
 # get the ip of the server
 IP=$(hostname -I)
 IP=${IP%% *}
