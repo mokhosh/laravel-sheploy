@@ -158,7 +158,7 @@ cat > post-receive << EOF
 PROD="/var/www/html/$ROOT"
 REPO="/home/git/$ROOT.git"
 
-git --work-tree=\\\$PROD --git-dir=\\\$REPO checkout -f
+git --work-tree=\\\$PROD --git-dir=\\\$REPO checkout main -f
 
 cd \\\$PROD || exit
 php artisan down
