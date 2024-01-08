@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# get the ip of the server
+IP=$(hostname -I)
+IP=${IP%% *}
+echo "IP Address of this server: $IP"
+
 # get the public ssh key from user
 echo "Enter your public ssh key:"
 read -r CLIENT_KEY
@@ -179,6 +184,11 @@ EOF
 EOFF
 
 # install laravel application
+echo "Use either of these commands to add the remote git to your local repo:"
+echo "git remote add production git@$IP:$ROOT.git"
+echo "git remote add production git@$DOMAIN:$ROOT.git"
+echo "And then push your code to production:"
+echo "git push production main"
 read -r -p 'Push your laravel application to the server and press Enter to continue...' _
 
 cd /var/www/html/"$ROOT" || exit
