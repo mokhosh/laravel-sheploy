@@ -144,6 +144,13 @@ fi
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer --quiet
 rm composer-setup.php
 
+# set up snap
+apt install libsquashfuse0 squashfuse fuse snapd -y
+snap install core; snap refresh core
+
+# set up node and npm
+snap install node --classic --channel=18
+
 # set up git
 cd /var/www/html || exit
 mkdir "$ROOT"
@@ -248,8 +255,6 @@ crontab schedule_cron
 rm schedule_cron
 
 # setup ssl
-apt install libsquashfuse0 squashfuse fuse snapd -y
-snap install core; snap refresh core
 apt remove certbot -y
 snap install --classic certbot
 ln -s /snap/bin/certbot /usr/bin/certbot
