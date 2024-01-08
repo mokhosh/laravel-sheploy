@@ -186,6 +186,7 @@ then
     sed -i 's/.*APP_ENV.*/APP_ENV=production/' .env
     sed -i 's/.*APP_DEBUG.*/APP_DEBUG=false/' .env
     sed -i "s/.*APP_URL.*/APP_URL=https:\/\/$DOMAIN/" .env
+    sed -i "s/http:\/\/localhost/https:\/\/$DOMAIN/" .env
     sed -i "s/.*DB_DATABASE.*/DB_DATABASE=$ROOT/" .env
     sed -i "s/.*DB_USERNAME.*/DB_USERNAME=${ROOT}user/" .env
     sed -i "s/.*DB_PASSWORD.*/DB_PASSWORD=\"$PASSWORD\"/" .env
