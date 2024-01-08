@@ -170,6 +170,20 @@ php artisan down
 composer install --no-dev --no-interaction
 npm install
 npm run build
+if ! [ test -f .env ]
+then
+    cp .env.example .env
+    sed -i 's/.*APP_ENV.*/APP_ENV=production/' .env
+    sed -i 's/.*APP_DEBUG.*/APP_DEBUG=false/' .env
+    sed -i "s/.*APP_URL.*/APP_URL=https:\/\/$DOMAIN/" .env
+    sed -i "s/.*DB_DATABASE.*/DB_DATABASE=$ROOT/" .env
+    sed -i "s/.*DB_USERNAME.*/DB_USERNAME=${ROOT}user/" .env
+    sed -i "s/.*DB_PASSWORD.*/DB_PASSWORD=\"$PASSWORD\"/" .env
+    sed -i "s/.*REDIS_PASSWORD.*/REDIS_PASSWORD=\"$PASSWORD\"/" .env
+    php artisan key:generate
+    chgrp -R www-data storage bootstrap/cache vendor
+    chmod -R ug+rwx storage bootstrap/cache vendor
+fi
 php artisan migrate --force
 php artisan auth:clear-resets
 php artisan config:clear
