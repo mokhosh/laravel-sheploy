@@ -180,7 +180,7 @@ php artisan down
 composer install --no-dev --no-interaction
 npm install
 npm run build
-if ! [ test -f .env ]
+if ! [ -f .env ]
 then
     cp .env.example .env
     sed -i 's/.*APP_ENV.*/APP_ENV=production/' .env
