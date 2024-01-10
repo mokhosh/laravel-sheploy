@@ -217,6 +217,7 @@ read -r -p 'Push your laravel application to the server and press Enter to conti
 cd /var/www/html/"$ROOT" || exit
 chgrp -R www-data storage bootstrap/cache vendor
 chmod -R ug+rwx storage bootstrap/cache vendor
+php artisan storage:link
 
 # setup queue
 apt install supervisor -y
