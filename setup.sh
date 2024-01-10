@@ -193,6 +193,7 @@ then
     sed -i "s/.*REDIS_PASSWORD.*/REDIS_PASSWORD=\"$PASSWORD\"/" .env
     php artisan key:generate
 fi
+php artisan horizon:terminate
 php artisan migrate --force
 php artisan auth:clear-resets
 php artisan config:clear
