@@ -81,7 +81,7 @@ apt update
 apt install php"$PHP_VERSION"-\
 {fpm,common,mysql,xml,xmlrpc,\
 curl,gd,imagick,cli,intl,dev,\
-imap,mbstring,opcache,soap,zip} unzip -y
+imap,mbstring,opcache,soap,zip,sqlite3} unzip -y
 
 sed -i 's/.*upload_max_filesize.*/upload_max_filesize = 1024M/' /etc/php/"$PHP_VERSION"/fpm/php.ini
 sed -i 's/.*post_max_size.*/post_max_size = 1024M/' /etc/php/"$PHP_VERSION"/fpm/php.ini
