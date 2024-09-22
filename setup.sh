@@ -53,27 +53,32 @@ echo "Installing nginx, mysql, and php"
 
 apt update
 apt install nginx -y
-apt install mysql-server -y
 
-mysql \
-  --user="root" \
-  --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PASSWORD';"
-mysql \
-  --user="root" \
-  --password="$PASSWORD" \
-  --execute="CREATE DATABASE $ROOT DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-mysql \
-  --user="root" \
-  --password="$PASSWORD" \
-  --execute="CREATE USER '${ROOT}user'@'localhost' IDENTIFIED BY '$PASSWORD';"
-mysql \
-  --user="root" \
-  --password="$PASSWORD" \
-  --execute="GRANT ALL ON $ROOT.* TO '${ROOT}user'@'localhost';"
-mysql \
-  --user="root" \
-  --password="$PASSWORD" \
-  --execute="FLUSH PRIVILEGES;"
+read -r -p "Do you want to install mysql? [y/N]" -n 1
+if [[ "$REPLY" =~ ^[Yy]$ ]]
+then
+    apt install mysql-server -y
+
+    mysql \
+      --user="root" \
+      --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$PASSWORD';"
+    mysql \
+      --user="root" \
+      --password="$PASSWORD" \
+      --execute="CREATE DATABASE $ROOT DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+    mysql \
+      --user="root" \
+      --password="$PASSWORD" \
+      --execute="CREATE USER '${ROOT}user'@'localhost' IDENTIFIED BY '$PASSWORD';"
+    mysql \
+      --user="root" \
+      --password="$PASSWORD" \
+      --execute="GRANT ALL ON $ROOT.* TO '${ROOT}user'@'localhost';"
+    mysql \
+      --user="root" \
+      --password="$PASSWORD" \
+      --execute="FLUSH PRIVILEGES;"
+fi
 
 apt install software-properties-common -y
 add-apt-repository ppa:ondrej/php -y
@@ -123,15 +128,19 @@ unlink /etc/nginx/sites-enabled/default
 nginx -t
 systemctl reload nginx
 
-apt install redis-server -y
-sed -i 's/.*supervised no.*/supervised systemd/' /etc/redis/redis.conf
-ESCAPED_PASS=${PASSWORD//&/\\&}
-sed -i "s/.*requirepass foobared.*/requirepass $ESCAPED_PASS/" /etc/redis/redis.conf
-systemctl restart redis.service
-printf "\n" | pecl install redis
-apt install php-redis -y
-sed -i 's/.*extension=redis.so.*/extension=redis.so/' /etc/php/"$PHP_VERSION"/cli/conf.d/20-redis.ini
-service php"$PHP_VERSION"-fpm reload
+read -r -p "Do you want to install redis? [y/N]" -n 1
+if [[ "$REPLY" =~ ^[Yy]$ ]]
+then
+    apt install redis-server -y
+    sed -i 's/.*supervised no.*/supervised systemd/' /etc/redis/redis.conf
+    ESCAPED_PASS=${PASSWORD//&/\\&}
+    sed -i "s/.*requirepass foobared.*/requirepass $ESCAPED_PASS/" /etc/redis/redis.conf
+    systemctl restart redis.service
+    printf "\n" | pecl install redis
+    apt install php-redis -y
+    sed -i 's/.*extension=redis.so.*/extension=redis.so/' /etc/php/"$PHP_VERSION"/cli/conf.d/20-redis.ini
+    service php"$PHP_VERSION"-fpm reload
+fi
 
 EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -193,7 +202,7 @@ then
     sed -i "s/.*REDIS_PASSWORD.*/REDIS_PASSWORD=\"$PASSWORD\"/" .env
     php artisan key:generate
 fi
-php artisan horizon:terminate
+php artisan queue:restart
 php artisan migrate --force
 php artisan auth:clear-resets
 php artisan config:clear
@@ -221,41 +230,45 @@ php artisan storage:link
 
 # setup queue
 apt install supervisor -y
-cat > /etc/supervisor/conf.d/horizon.conf << EOF
-[program:horizon]
+cat > /etc/supervisor/conf.d/worker.conf << EOF
+[program:worker]
 process_name=%(program_name)s
-command=php /var/www/html/$ROOT/artisan horizon
+command=php /var/www/html/$ROOT/artisan queue:work
 autostart=true
 autorestart=true
 user=www-data
 redirect_stderr=true
-stdout_logfile=/var/www/html/$ROOT/horizon.log
+stdout_logfile=/var/www/html/$ROOT/worker.log
 stopwaitsecs=3600
 
 EOF
 
 supervisorctl reread
 supervisorctl update
-supervisorctl start horizon
-
-# restart horizon every hour to avoid memory leaks
-crontab -l > horizon_cron
-echo "0 * * * * cd /var/www/html/$ROOT && php artisan horizon:terminate" >> horizon_cron
-crontab horizon_cron
-rm horizon_cron
+supervisorctl start worker
 
 # setup schedule
 apt install cron -y
 systemctl enable cron
+
+# restart worker every hour to avoid memory leaks
+crontab -l > worker_cron
+echo "0 * * * * cd /var/www/html/$ROOT && php artisan queue:work" >> worker_cron
+crontab worker_cron
+rm worker_cron
 
 crontab -l > schedule_cron
 echo "* * * * * cd /var/www/html/$ROOT && php artisan schedule:run >> /dev/null 2>&1" >> schedule_cron
 crontab schedule_cron
 rm schedule_cron
 
-# setup ssl
-apt remove certbot -y
-snap install --classic certbot
-ln -s /snap/bin/certbot /usr/bin/certbot
-certbot --nginx
-certbot renew --dry-run
+read -r -p "Have you pointed your domain to this server? [y/N]" -n 1
+if [[ "$REPLY" =~ ^[Yy]$ ]]
+then
+    # setup ssl
+    apt remove certbot -y
+    snap install --classic certbot
+    ln -s /snap/bin/certbot /usr/bin/certbot
+    certbot --nginx
+    certbot renew --dry-run
+fi
