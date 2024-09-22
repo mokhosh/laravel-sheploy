@@ -291,13 +291,49 @@ fi
 read -r -p "Do you want to install meilisearch? [y/N]" -n 1
 if [[ "$REPLY" =~ ^[Yy]$ ]]
 then
+    # Get the master key from user
+    echo "Enter a secure master key for meilisearch:"
+    read -r MEILI_KEY
+
     # Add Meilisearch package
     echo "deb [trusted=yes] https://apt.fury.io/meilisearch/ /" | tee /etc/apt/sources.list.d/fury.list
     # Update APT and install Meilisearch
     apt update && apt install meilisearch
     # Launch Meilisearch
     meilisearch
-    # todo add configuration
+
+    # Configure
+    useradd -d /var/lib/meilisearch -s /bin/false -m -r meilisearch
+    mkdir /var/lib/meilisearch/data /var/lib/meilisearch/dumps /var/lib/meilisearch/snapshots
+    chown -R meilisearch:meilisearch /var/lib/meilisearch
+    chmod 750 /var/lib/meilisearch
+    curl https://raw.githubusercontent.com/meilisearch/meilisearch/latest/config.toml > /etc/meilisearch.toml
+    sed -i "s/.*env =.*/env = \"production\"/" /etc/meilisearch.toml
+    sed -i "s/.*master_key =.*/master_key = \"$MEILI_KEY\"/" /etc/meilisearch.toml
+    sed -i "s/.*db_path =.*/db_path = \"/var/lib/meilisearch/data\"/" /etc/meilisearch.toml
+    sed -i "s/.*dump_dir =.*/dump_dir = \"/var/lib/meilisearch/dumps\"/" /etc/meilisearch.toml
+    sed -i "s/.*snapshot_dir =.*/snapshot_dir = \"/var/lib/meilisearch/snapshots\"/" /etc/meilisearch.toml
+
+cat << EOF > /etc/systemd/system/meilisearch.service
+[Unit]
+Description=Meilisearch
+After=systemd-user-sessions.service
+
+[Service]
+Type=simple
+WorkingDirectory=/var/lib/meilisearch
+ExecStart=/usr/local/bin/meilisearch --config-file-path /etc/meilisearch.toml
+User=meilisearch
+Group=meilisearch
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    systemctl enable meilisearch
+    systemctl start meilisearch
+    systemctl status meilisearch
 fi
 
 # todo add typesense
