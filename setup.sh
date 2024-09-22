@@ -273,6 +273,20 @@ then
     certbot renew --dry-run
 fi
 
+read -r -p "Do you want to install meilisearch? [y/N]" -n 1
+if [[ "$REPLY" =~ ^[Yy]$ ]]
+then
+    # Add Meilisearch package
+    echo "deb [trusted=yes] https://apt.fury.io/meilisearch/ /" | tee /etc/apt/sources.list.d/fury.list
+    # Update APT and install Meilisearch
+    apt update && apt install meilisearch
+    # Launch Meilisearch
+    meilisearch
+    # todo add configuration
+fi
+
+# todo add typesense
+
 read -r -p "Do you want to install ffmpeg? [y/N]" -n 1
 if [[ "$REPLY" =~ ^[Yy]$ ]]
 then
