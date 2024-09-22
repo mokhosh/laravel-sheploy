@@ -338,6 +338,25 @@ fi
 
 # todo add typesense
 
+read -r -p "Do you want to install typesense? [y/N]" -n 1
+if [[ "$REPLY" =~ ^[Yy]$ ]]
+then
+    read -r -p "Are you running a x64 CPU, choose no if it's arm64? [y/N]" -n 1
+    if [[ "$REPLY" =~ ^[Yy]$ ]]
+    then
+        # x64
+        curl -O https://dl.typesense.org/releases/27.0/typesense-server-27.0-amd64.deb
+        apt install ./typesense-server-27.0-amd64.deb
+    else
+        # arm64
+        curl -O https://dl.typesense.org/releases/27.0/typesense-server-27.0-arm64.deb
+        apt install ./typesense-server-27.0-arm64.deb
+    fi
+
+    # Start Typesense
+    systemctl start typesense-server.service
+fi
+
 read -r -p "Do you want to install ffmpeg? [y/N]" -n 1
 if [[ "$REPLY" =~ ^[Yy]$ ]]
 then
