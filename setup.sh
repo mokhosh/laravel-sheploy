@@ -240,8 +240,23 @@ user=www-data
 redirect_stderr=true
 stdout_logfile=/var/www/html/$ROOT/worker.log
 stopwaitsecs=3600
-
 EOF
+
+read -r -p "Have you installed Laravel Pulse? [y/N]" -n 1
+if [[ "$REPLY" =~ ^[Yy]$ ]]
+then
+cat > /etc/supervisor/conf.d/pulse.conf << EOF
+[program:pulse]
+process_name=%(program_name)s
+command=php /var/www/html/$ROOT/artisan pulse:check
+autostart=true
+autorestart=true
+user=www-data
+redirect_stderr=true
+stdout_logfile=/var/www/html/$ROOT/pulse.log
+stopwaitsecs=3600
+EOF
+fi
 
 supervisorctl reread
 supervisorctl update
