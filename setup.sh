@@ -272,3 +272,38 @@ then
     certbot --nginx
     certbot renew --dry-run
 fi
+
+read -r -p "Do you want to install ffmpeg? [y/N]" -n 1
+if [[ "$REPLY" =~ ^[Yy]$ ]]
+then
+    snap install ffmpeg
+fi
+
+read -r -p "Do you want to install yt-dlp? [y/N]" -n 1
+if [[ "$REPLY" =~ ^[Yy]$ ]]
+then
+    add-apt-repository ppa:tomtomtom/yt-dlp
+    apt update
+    apt install yt-dlp
+fi
+
+read -r -p "Do you want to install Docker? [y/N]" -n 1
+if [[ "$REPLY" =~ ^[Yy]$ ]]
+then
+    # Add Docker's official GPG key:
+    apt update
+    apt install ca-certificates curl
+    install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      tee /etc/apt/sources.list.d/docker.list > /dev/null
+    apt update
+
+    # Install Docker packages
+    apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+fi
