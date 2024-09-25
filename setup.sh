@@ -341,13 +341,15 @@ fi
 read -r -p "Do you want to install typesense? [y/N]" -n 1
 if [[ "$REPLY" =~ ^[Yy]$ ]]
 then
-    read -r -p "Are you running a x64 CPU, choose no if it's arm64? [y/N]" -n 1
-    if [[ "$REPLY" =~ ^[Yy]$ ]]
+    ARCH=$(uname -i)
+    if [[ "$ARCH" =~ x86_64 ]]
     then
+        echo "Installing x86 version."
         # x64
         curl -O https://dl.typesense.org/releases/27.0/typesense-server-27.0-amd64.deb
         apt install ./typesense-server-27.0-amd64.deb
     else
+        echo "Installing ARM version."
         # arm64
         curl -O https://dl.typesense.org/releases/27.0/typesense-server-27.0-arm64.deb
         apt install ./typesense-server-27.0-arm64.deb
