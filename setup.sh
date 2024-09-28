@@ -336,8 +336,6 @@ EOF
     systemctl status meilisearch
 fi
 
-# todo add typesense
-
 read -r -p "Do you want to install typesense? [y/N]" -n 1
 if [[ "$REPLY" =~ ^[Yy]$ ]]
 then
