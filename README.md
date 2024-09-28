@@ -13,6 +13,8 @@ this will copy the repo on your server, and ssh into it
 
 ### todo
 - [x] do any step you want
+- [ ] cleanup after installing typesense
+- [ ] dont change env db if mysql is not installed
 - [ ] put blank lines before prompts
 - [ ] stylize prompts
 - [ ] modularize
