@@ -242,6 +242,10 @@ stdout_logfile=/var/www/html/$ROOT/worker.log
 stopwaitsecs=3600
 EOF
 
+supervisorctl reread
+supervisorctl update
+supervisorctl start worker
+
 read -r -p "Have you installed Laravel Pulse? [y/N]" -n 1
 if [[ "$REPLY" =~ ^[Yy]$ ]]
 then
@@ -256,11 +260,11 @@ redirect_stderr=true
 stdout_logfile=/var/www/html/$ROOT/pulse.log
 stopwaitsecs=3600
 EOF
-fi
 
 supervisorctl reread
 supervisorctl update
-supervisorctl start worker
+supervisorctl start pulse
+fi
 
 # setup schedule
 apt install cron -y
