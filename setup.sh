@@ -272,7 +272,7 @@ systemctl enable cron
 
 # restart worker every hour to avoid memory leaks
 crontab -l > worker_cron
-echo "0 * * * * cd /var/www/html/$ROOT && php artisan queue:work" >> worker_cron
+echo "0 * * * * cd /var/www/html/$ROOT && php artisan queue:restart" >> worker_cron
 crontab worker_cron
 rm worker_cron
 
